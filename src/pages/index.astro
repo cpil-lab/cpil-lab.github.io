@@ -1,0 +1,129 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowRight, CheckCircle2 } from 'lucide-astro';
+import Hero from '../components/Hero.astro';
+import NewsCard from '../components/NewsCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Layout from '../layouts/Layout.astro';
+import { openPositions, researchAreas, siteInfo } from '../data/site';
+import { withBase } from '../lib/paths';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featuredProjects = projects
+  .filter((project) => project.data.featured)
+  .concat(projects.filter((project) => !project.data.featured && project.data.status === 'active'))
+  .slice(0, 3);
+
+const latestNews = (await getCollection('news'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<Layout
+  title={`${siteInfo.shortName} | ${siteInfo.name}`}
+  description="Cyber-Physical Intelligence Lab research homepage for AI, networks, systems, infrastructure, and cyber-physical intelligence."
+>
+  <Hero
+    eyebrow={`${siteInfo.shortName} · ${siteInfo.platforms.join(' · ')}`}
+    title="Cyber-physical intelligence for networks, systems, and connected infrastructure."
+    description="CPIL develops AI methods for cyber-physical systems, communication networks, graph-grounded reasoning, multi-agent coordination, and intelligent infrastructure."
+    primaryCta={{ label: 'Explore Projects', href: '/projects/' }}
+    secondaryCta={{ label: 'Join the Lab', href: '/join/' }}
+  />
+
+  <section class="section-shell py-16">
+    <div class="grid gap-8 lg:grid-cols-[0.72fr_1fr]">
+      <div>
+        <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Mission</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-normal text-[rgb(var(--ink))]">Intelligence that understands real systems.</h2>
+      </div>
+      <div class="grid gap-5 text-base leading-8 text-[rgb(var(--muted))]">
+        <p>
+          CPIL studies how learning, reasoning, and control can improve infrastructure-scale systems where digital decisions meet physical constraints.
+        </p>
+        <p>
+          The lab emphasizes rigorous systems thinking, data-grounded AI, and deployable tools for communication networks, IoT, and complex cyber-physical environments.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-[rgba(var(--line),0.78)] bg-[rgb(var(--surface-raised))] py-16">
+    <div class="section-shell">
+      <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Research Areas</p>
+          <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">What we work on</h2>
+        </div>
+        <a href={withBase('/projects/')} class="inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-strong))]">
+          View all projects
+          <ArrowRight class="size-4" aria-hidden="true" />
+        </a>
+      </div>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          researchAreas.map((area) => (
+            <article class="card p-5">
+              <CheckCircle2 class="size-5 text-[rgb(var(--accent-strong))]" aria-hidden="true" />
+              <h3 class="mt-4 text-lg font-bold text-[rgb(var(--ink))]">{area.title}</h3>
+              <p class="mt-3 text-sm leading-6 text-[rgb(var(--muted))]">{area.summary}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell py-16">
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Featured Projects</p>
+        <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Current research threads</h2>
+      </div>
+      <a href={withBase('/projects/')} class="inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-strong))]">
+        Browse projects
+        <ArrowRight class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
+      {featuredProjects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="border-y border-[rgba(var(--line),0.78)] bg-[rgb(var(--surface-raised))] py-16">
+    <div class="section-shell">
+      <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Latest News</p>
+          <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Recent updates</h2>
+        </div>
+        <a href={withBase('/news/')} class="inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-strong))]">
+          View all news
+          <ArrowRight class="size-4" aria-hidden="true" />
+        </a>
+      </div>
+      <div class="mt-8 grid gap-5 md:grid-cols-3">
+        {latestNews.map((item) => <NewsCard item={item} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell py-16">
+    <div class="card grid gap-8 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+      <div>
+        <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Join CPIL</p>
+        <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Open positions across the research pipeline</h2>
+        <p class="mt-4 max-w-3xl text-sm leading-7 text-[rgb(var(--muted))]">
+          CPIL welcomes {openPositions.join(', ')} with interests in AI, systems, networks, cyber-physical infrastructure, and applied machine learning.
+        </p>
+      </div>
+      <a
+        href={withBase('/join/')}
+        class="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[rgb(var(--accent-strong))] px-5 py-3 text-sm font-bold text-white no-underline"
+      >
+        See how to apply
+        <ArrowRight class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,47 @@
+---
+import { ArrowUpRight, Calendar } from 'lucide-astro';
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../lib/paths';
+
+interface Props {
+  item: CollectionEntry<'news'>;
+}
+
+const { item } = Astro.props;
+const { title, date, summary, image, link } = item.data;
+const formattedDate = new Intl.DateTimeFormat('en', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+}).format(date);
+---
+
+<article class="card grid h-full overflow-hidden">
+  {
+    image && (
+      <img
+        src={withBase(image)}
+        alt=""
+        class="aspect-[16/9] w-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
+  <div class="grid gap-4 p-5">
+    <p class="inline-flex items-center gap-2 text-sm font-semibold text-[rgb(var(--muted))]">
+      <Calendar class="size-4" aria-hidden="true" />
+      <time datetime={date.toISOString()}>{formattedDate}</time>
+    </p>
+    <h3 class="text-xl font-bold text-[rgb(var(--ink))]">{title}</h3>
+    <p class="text-sm leading-6 text-[rgb(var(--muted))]">{summary}</p>
+    {
+      link && (
+        <a href={link} class="inline-flex items-center gap-1.5 text-sm font-semibold text-[rgb(var(--accent-strong))]">
+          Read more
+          <ArrowUpRight class="size-4" aria-hidden="true" />
+        </a>
+      )
+    }
+  </div>
+</article>

@@ -1,0 +1,59 @@
+---
+import { ExternalLink, Mail } from 'lucide-astro';
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../lib/paths';
+
+interface Props {
+  person: CollectionEntry<'people'>;
+}
+
+const { person } = Astro.props;
+const { name, role, affiliation, photo, email, website, interests, bio } = person.data;
+---
+
+<article class="card grid h-full overflow-hidden">
+  <img
+    src={withBase(photo)}
+    alt={`Photo or profile placeholder for ${name}`}
+    class="aspect-[4/3] w-full object-cover"
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="grid gap-4 p-5">
+    <div>
+      <h3 class="text-xl font-bold text-[rgb(var(--ink))]">{name}</h3>
+      <p class="mt-1 text-sm font-semibold text-[rgb(var(--accent-strong))]">{role}</p>
+      <p class="mt-1 text-sm text-[rgb(var(--muted))]">{affiliation}</p>
+    </div>
+    <p class="text-sm leading-6 text-[rgb(var(--muted))]">{bio}</p>
+    {
+      interests.length > 0 && (
+        <ul class="flex flex-wrap gap-2" aria-label={`${name} research interests`}>
+          {interests.map((interest) => (
+            <li class="rounded-md bg-[rgba(var(--accent),0.1)] px-2.5 py-1 text-xs font-semibold text-[rgb(var(--accent-strong))]">
+              {interest}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    <div class="flex flex-wrap gap-3 text-sm">
+      {
+        email && (
+          <a href={`mailto:${email}`} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
+            <Mail class="size-4" aria-hidden="true" />
+            Email
+          </a>
+        )
+      }
+      {
+        website && (
+          <a href={website} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
+            <ExternalLink class="size-4" aria-hidden="true" />
+            Website
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>
