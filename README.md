@@ -78,6 +78,7 @@ Create a GitHub OAuth App:
 Then add these Cloudflare Pages environment variables:
 
 - `GITHUB_CLIENT_ID`: add this plain, non-secret value in `wrangler.toml` under `[vars]`.
+- `GITHUB_OAUTH_SCOPE`: keep this as `public_repo user:email` for a public repository.
 - `GITHUB_CLIENT_SECRET`: add this in Cloudflare Pages as an encrypted secret.
 
 Because this project has `wrangler.toml`, Cloudflare manages plain variables from that file. The dashboard will only let you add encrypted secrets.

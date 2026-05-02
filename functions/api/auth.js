@@ -15,7 +15,7 @@ export async function onRequest({ request, env }) {
 
   redirectUrl.searchParams.set('client_id', env.GITHUB_CLIENT_ID);
   redirectUrl.searchParams.set('redirect_uri', `${url.origin}/api/callback`);
-  redirectUrl.searchParams.set('scope', env.GITHUB_OAUTH_SCOPE || 'repo user:email');
+  redirectUrl.searchParams.set('scope', env.GITHUB_OAUTH_SCOPE || 'public_repo user:email');
   redirectUrl.searchParams.set('state', state);
 
   const headers = new Headers({

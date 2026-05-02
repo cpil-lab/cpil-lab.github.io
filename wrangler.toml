@@ -6,3 +6,4 @@ compatibility_date = "2026-05-02"
 # uses wrangler.toml as Cloudflare Pages configuration.
 [vars]
 GITHUB_CLIENT_ID = "Ov23liIimCDAsY3lm4hJ"
+GITHUB_OAUTH_SCOPE = "public_repo user:email"
