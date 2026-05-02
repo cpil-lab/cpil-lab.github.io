@@ -13,6 +13,10 @@ function parseCookies(cookieHeader) {
 
 function cmsResponse(status, payload, responseStatus = 200) {
   const message = `authorization:github:${status}:${JSON.stringify(payload)}`;
+  const statusText =
+    status === 'success'
+      ? 'Authentication complete. Returning to the CMS...'
+      : payload.error_description || payload.error || 'Authentication failed.';
   const body = `<!doctype html>
 <html lang="en">
   <head>
@@ -20,14 +24,23 @@ function cmsResponse(status, payload, responseStatus = 200) {
     <title>GitHub Authentication</title>
   </head>
   <body>
-    <p>Completing GitHub authentication...</p>
+    <p id="oauth-status"></p>
     <script>
       const message = ${JSON.stringify(message)};
-      if (window.opener) {
-        window.opener.postMessage(message, window.location.origin);
+      const statusText = ${JSON.stringify(statusText)};
+      document.getElementById('oauth-status').textContent = statusText;
+      const finish = (targetOrigin) => {
+        window.opener.postMessage(message, targetOrigin);
         window.close();
+      };
+
+      if (window.opener) {
+        window.addEventListener('message', (event) => {
+          finish(event.origin);
+        }, { once: true });
+        window.opener.postMessage('authorizing:github', '*');
       } else {
-        document.body.textContent = 'Authentication complete. You can close this window.';
+        document.body.textContent = ${JSON.stringify(statusText)};
       }
     </script>
   </body>
