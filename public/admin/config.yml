@@ -4,6 +4,7 @@ backend:
   repo: dun-yuan/CPIL-webpage
   branch: main
   squash_merges: true
+  open_authoring: true
   site_domain: https://cpil-webpage.pages.dev
   base_url: https://cpil-webpage.pages.dev
   auth_endpoint: /api/auth

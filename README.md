@@ -61,6 +61,8 @@ Before launch:
 
 The CMS stores uploads under `public/images/uploads` and writes content changes to Markdown files in `src/content`.
 
+Open authoring is enabled, so GitHub users without direct write access can submit CMS changes through fork-backed pull requests. Maintainers should still review every CMS-created PR before merging.
+
 ### Cloudflare Pages CMS Login
 
 This repo includes Cloudflare Pages Functions for Decap CMS GitHub OAuth:
@@ -80,7 +82,7 @@ Then add these Cloudflare Pages environment variables:
 
 Because this project has `wrangler.toml`, Cloudflare manages plain variables from that file. The dashboard will only let you add encrypted secrets.
 
-If the repo is private, CMS users need GitHub access to `dun-yuan/CPIL-webpage`.
+Open authoring works best with a public repository. Users without direct write access can propose changes through pull requests, but they cannot publish directly to `main`.
 
 ## Recommended Branch Protection
 
