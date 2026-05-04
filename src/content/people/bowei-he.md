@@ -1,5 +1,5 @@
 ---
-name: BOWEI HE
+name: Bowei He
 role: Postdocs
 affiliation: MBZUAI
 email: Bowei.He@mbzuai.ac.ae
