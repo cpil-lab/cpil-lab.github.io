@@ -8,12 +8,12 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 const topics = Array.from(new Set(projects.flatMap((project) => project.data.tags))).sort();
 ---
 
-<Layout title="Projects" description="Active and completed CPIL research projects across cyber-physical intelligence, AI for networks, RAG, and multi-agent systems.">
+<Layout title="Projects" description="Detailed CPIL research project and direction listings across AI, cyber-physical systems, efficient inference, agentic AI, and intelligent infrastructure.">
   <section class="section-shell py-14">
     <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Projects</p>
-    <h1 class="mt-3 text-4xl font-bold text-[rgb(var(--ink))]">Research projects</h1>
+    <h1 class="mt-3 text-4xl font-bold text-[rgb(var(--ink))]">Research projects and directions</h1>
     <p class="mt-5 max-w-3xl text-lg leading-8 text-[rgb(var(--muted))]">
-      Explore CPIL projects by topic and status across cyber-physical intelligence, networks, systems, and infrastructure.
+      Browse CPIL research directions and project records by topic and status. Each entry is stored as Markdown so collaborators can improve descriptions through pull requests.
     </p>
   </section>
 

@@ -6,9 +6,12 @@ const optionalUrl = z.string().url().or(z.literal('')).optional();
 const optionalEmail = z.string().email().or(z.literal('')).optional();
 
 const role = z.enum([
+  'Principal Investigator',
+  'PI',
   'Director',
   'Faculty / Senior Researchers',
   'PhD Students',
+  "Undergraduate / Master's Students",
   'Postdocs',
   'Visiting Scholars',
   'Interns',
@@ -70,6 +73,7 @@ const publications = defineCollection({
       'demo',
     ]),
     abstract: z.string(),
+    badges: z.array(z.string()).default([]),
     links: z
       .object({
         paper: optionalUrl,
@@ -87,8 +91,14 @@ const news = defineCollection({
   loader: glob({ base: './src/content/news', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     title: z.string(),
+    shortTitle: z.string().optional(),
     date: z.coerce.date(),
+    displayDate: z.string().optional(),
+    category: z.string().optional(),
+    tags: z.array(z.string()).default([]),
     summary: z.string(),
+    sourceType: z.string().optional(),
+    sourceUrl: optionalUrl,
     image: z.string().optional(),
     link: optionalUrl,
   }),

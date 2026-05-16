@@ -7,15 +7,25 @@ interface Props {
 }
 
 const { publication } = Astro.props;
-const { title, authors, venue, year, type, abstract, links, tags } = publication.data;
-const searchable = [title, authors.join(' '), venue, year, type, tags.join(' ')].join(' ').toLowerCase();
+const { title, authors, venue, year, type, abstract, badges, links, tags } = publication.data;
+const searchable = [title, authors.join(' '), venue, year, type, badges.join(' '), tags.join(' ')].join(' ').toLowerCase();
+const availableLinks = [
+  links.paper ? 'paper' : '',
+  links.code ? 'code' : '',
+  links.project ? 'project' : '',
+  links.bibtex ? 'bibtex' : '',
+].filter(Boolean).join('|');
+const searchableBadges = badges.join('|').toLowerCase();
 ---
 
 <article
   class="publication-item card p-5"
   data-year={year}
+  data-venue={venue.toLowerCase()}
   data-type={type}
+  data-badges={searchableBadges}
   data-tags={tags.join('|').toLowerCase()}
+  data-links={availableLinks}
   data-search={searchable}
 >
   <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -24,9 +34,18 @@ const searchable = [title, authors.join(' '), venue, year, type, tags.join(' ')]
       <p class="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{authors.join(', ')}</p>
       <p class="mt-2 text-sm font-semibold text-[rgb(var(--ink))]">{venue}, {year}</p>
     </div>
-    <span class="w-fit rounded-md bg-[rgba(var(--accent),0.11)] px-2.5 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[rgb(var(--accent-strong))]">
-      {type}
-    </span>
+    <div class="flex flex-wrap gap-2">
+      <span class="w-fit rounded-md bg-[rgba(var(--accent),0.11)] px-2.5 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[rgb(var(--accent-strong))]">
+        {type}
+      </span>
+      {
+        badges.map((badge) => (
+          <span class="w-fit rounded-md bg-[rgba(var(--warm),0.12)] px-2.5 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[rgb(var(--warm))]">
+            {badge}
+          </span>
+        ))
+      }
+    </div>
   </div>
   <p class="mt-4 text-sm leading-7 text-[rgb(var(--muted))]">{abstract}</p>
   {

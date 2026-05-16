@@ -1,9 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import { ArrowRight, CheckCircle2 } from 'lucide-astro';
+import { ArrowRight } from 'lucide-astro';
 import Hero from '../components/Hero.astro';
 import NewsCard from '../components/NewsCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import PublicationItem from '../components/PublicationItem.astro';
 import Layout from '../layouts/Layout.astro';
 import { openPositions, researchAreas, siteInfo } from '../data/site';
 import { withBase } from '../lib/paths';
@@ -14,6 +15,14 @@ const featuredProjects = projects
   .concat(projects.filter((project) => !project.data.featured && project.data.status === 'active'))
   .slice(0, 3);
 
+const publications = (await getCollection('publications')).sort((a, b) => {
+  return b.data.year - a.data.year || a.data.title.localeCompare(b.data.title);
+});
+const featuredPublications = publications
+  .filter((publication) => publication.data.featured)
+  .concat(publications.filter((publication) => !publication.data.featured))
+  .slice(0, 6);
+
 const latestNews = (await getCollection('news'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
@@ -21,28 +30,35 @@ const latestNews = (await getCollection('news'))
 
 <Layout
   title={`${siteInfo.shortName} | ${siteInfo.name}`}
-  description="Cyber-Physical Intelligence Lab research homepage for AI, networks, systems, infrastructure, and cyber-physical intelligence."
+  description={siteInfo.description}
 >
   <Hero
-    eyebrow={`${siteInfo.shortName} · ${siteInfo.platforms.join(' · ')}`}
-    title="Cyber-physical intelligence for networks, systems, and connected infrastructure."
-    description="CPIL develops AI methods for cyber-physical systems, communication networks, graph-grounded reasoning, multi-agent coordination, and intelligent infrastructure."
-    primaryCta={{ label: 'Explore Projects', href: '/projects/' }}
-    secondaryCta={{ label: 'Join the Lab', href: '/join/' }}
+    eyebrow={`${siteInfo.shortName} / ${siteInfo.platforms.join(' / ')}`}
+    title={siteInfo.name}
+    subtitle={siteInfo.heroSubtitle}
+    description="CPIL is an academic research lab studying intelligent systems for the cyber-physical world. Led by Prof. Xue (Steve) Liu, the lab brings together researchers across MBZUAI, McGill University, and Mila to advance AI, learning, reasoning, optimization, and intelligent infrastructure."
+    ctas={[
+      { label: 'View Publications', href: '/publications/' },
+      { label: 'Join CPIL', href: '/join/' },
+      { label: 'Read News', href: '/news/' },
+    ]}
   />
 
   <section class="section-shell py-16">
     <div class="grid gap-8 lg:grid-cols-[0.72fr_1fr]">
       <div>
-        <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Mission</p>
-        <h2 class="mt-3 text-3xl font-bold tracking-normal text-[rgb(var(--ink))]">Intelligence that understands real systems.</h2>
+        <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Overview</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-normal text-[rgb(var(--ink))]">Frontier AI for cyber-physical intelligence.</h2>
       </div>
       <div class="grid gap-5 text-base leading-8 text-[rgb(var(--muted))]">
         <p>
-          CPIL studies how learning, reasoning, and control can improve infrastructure-scale systems where digital decisions meet physical constraints.
+          {siteInfo.name} is led by {siteInfo.director}. The lab develops methods and systems for trustworthy, efficient, and agentic intelligence in environments where computation, data, infrastructure, and physical processes interact.
         </p>
         <p>
-          The lab emphasizes rigorous systems thinking, data-grounded AI, and deployable tools for communication networks, IoT, and complex cyber-physical environments.
+          Research spans large models, efficient inference, retrieval-augmented reasoning, representation learning, reinforcement learning, federated learning, optimization, trustworthy evaluation, and AI for infrastructure.
+        </p>
+        <p>
+          CPIL connects foundational AI research with applications in cyber-physical systems, digital twins, wireless networks, data centers, energy systems, and autonomous control.
         </p>
       </div>
     </div>
@@ -53,19 +69,21 @@ const latestNews = (await getCollection('news'))
       <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Research Areas</p>
-          <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">What we work on</h2>
+          <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Core themes</h2>
         </div>
         <a href={withBase('/projects/')} class="inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-strong))]">
-          View all projects
+          Research overview
           <ArrowRight class="size-4" aria-hidden="true" />
         </a>
       </div>
-      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-8 grid gap-px overflow-hidden rounded-md border border-[rgba(var(--line),0.9)] bg-[rgba(var(--line),0.9)] sm:grid-cols-2 lg:grid-cols-3">
         {
-          researchAreas.map((area) => (
-            <article class="card p-5">
-              <CheckCircle2 class="size-5 text-[rgb(var(--accent-strong))]" aria-hidden="true" />
-              <h3 class="mt-4 text-lg font-bold text-[rgb(var(--ink))]">{area.title}</h3>
+          researchAreas.map((area, index) => (
+            <article class="bg-[rgb(var(--surface-raised))] p-5">
+              <p class="text-xs font-semibold uppercase tracking-[0.12em] text-[rgb(var(--warm))]">
+                Theme {String(index + 1).padStart(2, '0')}
+              </p>
+              <h3 class="mt-3 text-lg font-bold text-[rgb(var(--ink))]">{area.title}</h3>
               <p class="mt-3 text-sm leading-6 text-[rgb(var(--muted))]">{area.summary}</p>
             </article>
           ))
@@ -77,15 +95,15 @@ const latestNews = (await getCollection('news'))
   <section class="section-shell py-16">
     <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div>
-        <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Featured Projects</p>
-        <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Current research threads</h2>
+        <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Projects</p>
+        <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Featured research directions</h2>
       </div>
       <a href={withBase('/projects/')} class="inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-strong))]">
         Browse projects
         <ArrowRight class="size-4" aria-hidden="true" />
       </a>
     </div>
-    <div class="mt-8 grid gap-5 md:grid-cols-3">
+    <div class="mt-8 grid gap-5 lg:grid-cols-3">
       {featuredProjects.map((project) => <ProjectCard project={project} />)}
     </div>
   </section>
@@ -94,32 +112,48 @@ const latestNews = (await getCollection('news'))
     <div class="section-shell">
       <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Latest News</p>
-          <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Recent updates</h2>
+          <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Publications</p>
+          <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Featured papers</h2>
         </div>
-        <a href={withBase('/news/')} class="inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-strong))]">
-          View all news
+        <a href={withBase('/publications/')} class="inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-strong))]">
+          View all publications
           <ArrowRight class="size-4" aria-hidden="true" />
         </a>
       </div>
-      <div class="mt-8 grid gap-5 md:grid-cols-3">
-        {latestNews.map((item) => <NewsCard item={item} />)}
+      <div class="mt-8 grid gap-5">
+        {featuredPublications.map((publication) => <PublicationItem publication={publication} />)}
       </div>
     </div>
   </section>
 
   <section class="section-shell py-16">
-    <div class="card grid gap-8 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">News</p>
+        <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Recent updates</h2>
+      </div>
+      <a href={withBase('/news/')} class="inline-flex items-center gap-2 text-sm font-bold text-[rgb(var(--accent-strong))]">
+        View all news
+        <ArrowRight class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
+      {latestNews.map((item) => <NewsCard item={item} />)}
+    </div>
+  </section>
+
+  <section class="border-y border-[rgba(var(--line),0.78)] bg-[rgb(var(--surface-raised))] py-16">
+    <div class="section-shell grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
       <div>
         <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Join CPIL</p>
-        <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Open positions across the research pipeline</h2>
+        <h2 class="mt-3 text-3xl font-bold text-[rgb(var(--ink))]">Prospective students and collaborators</h2>
         <p class="mt-4 max-w-3xl text-sm leading-7 text-[rgb(var(--muted))]">
-          CPIL welcomes {openPositions.join(', ')} with interests in AI, systems, networks, cyber-physical infrastructure, and applied machine learning.
+          CPIL welcomes {openPositions.join(', ')} interested in trustworthy, efficient, and agentic AI systems for the cyber-physical world.
         </p>
       </div>
       <a
         href={withBase('/join/')}
-        class="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[rgb(var(--accent-strong))] px-5 py-3 text-sm font-bold text-white no-underline"
+        class="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[rgb(var(--accent-strong))] px-5 py-3 text-sm font-semibold text-white no-underline"
       >
         See how to apply
         <ArrowRight class="size-4" aria-hidden="true" />

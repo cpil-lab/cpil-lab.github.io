@@ -8,16 +8,19 @@ const publications = (await getCollection('publications')).sort((a, b) => {
   return b.data.year - a.data.year || a.data.title.localeCompare(b.data.title);
 });
 const years = Array.from(new Set(publications.map((publication) => publication.data.year))).sort((a, b) => b - a);
+const venues = Array.from(new Set(publications.map((publication) => publication.data.venue))).sort();
 const types = Array.from(new Set(publications.map((publication) => publication.data.type))).sort();
+const badges = Array.from(new Set(publications.flatMap((publication) => publication.data.badges))).sort();
 const topics = Array.from(new Set(publications.flatMap((publication) => publication.data.tags))).sort();
+const publicationCountLabel = `${publications.length} publication${publications.length === 1 ? '' : 's'} shown`;
 ---
 
-<Layout title="Publications" description="Searchable CPIL publications with year, type, topic filters, paper links, code links, project links, and BibTeX copy buttons.">
+<Layout title="Publications" description="CPIL publication overview with filtering support for year, venue, research area, paper type, and available links.">
   <section class="section-shell py-14">
     <p class="text-sm font-bold uppercase tracking-[0.14em] text-[rgb(var(--warm))]">Publications</p>
     <h1 class="mt-3 text-4xl font-bold text-[rgb(var(--ink))]">Research outputs</h1>
     <p class="mt-5 max-w-3xl text-lg leading-8 text-[rgb(var(--muted))]">
-      Browse CPIL publication records by year, topic, and type, with links to related papers, code, projects, and citation metadata.
+      Browse CPIL publication records by year, venue, research area, paper type, recognition, and available links. Records are Markdown files so new papers and corrections can be proposed through pull requests.
     </p>
   </section>
 
@@ -32,7 +35,7 @@ const topics = Array.from(new Set(publications.flatMap((publication) => publicat
           class="min-h-11 rounded-md border border-[rgba(var(--line),0.95)] bg-[rgb(var(--surface-raised))] px-3 text-sm text-[rgb(var(--ink))] placeholder:text-[rgb(var(--muted))]"
         />
       </label>
-      <div class="grid gap-5 lg:grid-cols-[1fr_auto_auto] lg:items-end">
+      <div class="grid gap-5 lg:grid-cols-[1fr_auto_auto_auto_auto_auto] lg:items-end">
         <TagFilter label="Topic" name="publication-topic" options={topics} />
         <label class="grid gap-2 text-sm font-semibold text-[rgb(var(--ink))]">
           Year
@@ -45,6 +48,16 @@ const topics = Array.from(new Set(publications.flatMap((publication) => publicat
           </select>
         </label>
         <label class="grid gap-2 text-sm font-semibold text-[rgb(var(--ink))]">
+          Venue
+          <select
+            id="publication-venue-filter"
+            class="min-h-11 rounded-md border border-[rgba(var(--line),0.95)] bg-[rgb(var(--surface-raised))] px-3 text-sm text-[rgb(var(--ink))]"
+          >
+            <option value="all">All venues</option>
+            {venues.map((venue) => <option value={venue.toLowerCase()}>{venue}</option>)}
+          </select>
+        </label>
+        <label class="grid gap-2 text-sm font-semibold text-[rgb(var(--ink))]">
           Type
           <select
             id="publication-type-filter"
@@ -54,8 +67,31 @@ const topics = Array.from(new Set(publications.flatMap((publication) => publicat
             {types.map((type) => <option value={type}>{type}</option>)}
           </select>
         </label>
+        <label class="grid gap-2 text-sm font-semibold text-[rgb(var(--ink))]">
+          Recognition
+          <select
+            id="publication-badge-filter"
+            class="min-h-11 rounded-md border border-[rgba(var(--line),0.95)] bg-[rgb(var(--surface-raised))] px-3 text-sm text-[rgb(var(--ink))]"
+          >
+            <option value="all">All</option>
+            {badges.map((badge) => <option value={badge.toLowerCase()}>{badge}</option>)}
+          </select>
+        </label>
+        <label class="grid gap-2 text-sm font-semibold text-[rgb(var(--ink))]">
+          Links
+          <select
+            id="publication-link-filter"
+            class="min-h-11 rounded-md border border-[rgba(var(--line),0.95)] bg-[rgb(var(--surface-raised))] px-3 text-sm text-[rgb(var(--ink))]"
+          >
+            <option value="all">Any</option>
+            <option value="paper">PDF</option>
+            <option value="code">Code</option>
+            <option value="project">Project page</option>
+            <option value="bibtex">BibTeX</option>
+          </select>
+        </label>
       </div>
-      <p id="publication-count" class="text-sm text-[rgb(var(--muted))]">{publications.length} publications shown</p>
+      <p id="publication-count" class="text-sm text-[rgb(var(--muted))]">{publicationCountLabel}</p>
     </div>
 
     <div id="publication-list" class="grid gap-5">
@@ -69,13 +105,16 @@ const topics = Array.from(new Set(publications.flatMap((publication) => publicat
 
 <script is:inline>
   (() => {
-    const state = { topic: 'all', year: 'all', type: 'all', search: '' };
+    const state = { topic: 'all', year: 'all', venue: 'all', type: 'all', badge: 'all', link: 'all', search: '' };
     const items = Array.from(document.querySelectorAll('.publication-item'));
     const empty = document.getElementById('publication-empty');
     const count = document.getElementById('publication-count');
     const search = document.getElementById('publication-search');
     const year = document.getElementById('publication-year-filter');
+    const venue = document.getElementById('publication-venue-filter');
     const type = document.getElementById('publication-type-filter');
+    const badge = document.getElementById('publication-badge-filter');
+    const link = document.getElementById('publication-link-filter');
 
     const setActiveButton = (group, value) => {
       group.querySelectorAll('.filter-button').forEach((button) => {
@@ -94,9 +133,14 @@ const topics = Array.from(new Set(publications.flatMap((publication) => publicat
         const searchable = item.dataset.search || '';
         const matchesTopic = state.topic === 'all' || tags.split('|').includes(state.topic);
         const matchesYear = state.year === 'all' || item.dataset.year === state.year;
+        const matchesVenue = state.venue === 'all' || item.dataset.venue === state.venue;
         const matchesType = state.type === 'all' || item.dataset.type === state.type;
+        const badges = item.dataset.badges || '';
+        const matchesBadge = state.badge === 'all' || badges.split('|').includes(state.badge);
+        const links = item.dataset.links || '';
+        const matchesLink = state.link === 'all' || links.split('|').includes(state.link);
         const matchesSearch = !state.search || searchable.includes(state.search);
-        const show = matchesTopic && matchesYear && matchesType && matchesSearch;
+        const show = matchesTopic && matchesYear && matchesVenue && matchesType && matchesBadge && matchesLink && matchesSearch;
         item.classList.toggle('hidden', !show);
         if (show) visible += 1;
       });
@@ -124,8 +168,23 @@ const topics = Array.from(new Set(publications.flatMap((publication) => publicat
       applyFilters();
     });
 
+    venue?.addEventListener('change', () => {
+      state.venue = venue.value;
+      applyFilters();
+    });
+
     type?.addEventListener('change', () => {
       state.type = type.value;
+      applyFilters();
+    });
+
+    badge?.addEventListener('change', () => {
+      state.badge = badge.value;
+      applyFilters();
+    });
+
+    link?.addEventListener('change', () => {
+      state.link = link.value;
       applyFilters();
     });
 

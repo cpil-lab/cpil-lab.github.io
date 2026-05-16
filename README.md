@@ -46,7 +46,20 @@ Content files live in:
 
 Each collection is validated in `src/content.config.ts`. If a content file is missing a required field or has the wrong type, `npm run build` fails before deployment.
 
-Sample content includes placeholder records for Xue (Steve) Liu, neutral test projects, test papers, and news. Replace placeholder contact details, venues, citations, and project descriptions before public launch.
+Content records drive the public people, projects, publications, and news pages. The current public people collection keeps the verified PR-updated profiles, while projects and publications include one sample entry each for future contributors to copy.
+
+## Content Contribution Workflow
+
+Anyone with a GitHub account can propose content updates by opening a pull request against `main`.
+
+Recommended paths:
+
+- People profiles: `src/content/people/*.md`
+- Project records: `src/content/projects/*.md`
+- Publication records: `src/content/publications/*.md`
+- News items: `src/content/news/*.md`
+
+The GitHub Actions workflow runs `npm run build` on pull requests so content schema errors are caught before merge. Maintainers should review each PR, verify names/citations/contact details, and merge only approved changes.
 
 ## Editing Through Decap CMS
 
@@ -55,7 +68,7 @@ Decap CMS is configured in `public/admin/config.yml`.
 Before launch:
 
 1. Confirm the CMS backend points to `cpil-lab/cpil-lab.github.io`.
-2. Replace placeholder contact details.
+2. Confirm recruitment contacts and publication metadata.
 3. Configure GitHub OAuth for Decap CMS if `/admin` will be used. GitHub Pages is static, so CMS login needs an external OAuth proxy, Netlify authentication provider, or a Cloudflare Pages deployment for the auth endpoints.
 4. Keep `publish_mode: editorial_workflow` enabled.
 
@@ -71,6 +84,8 @@ The CMS config in `public/admin/config.yml` is set to write to:
 - Public site: `https://cpil-lab.github.io`
 
 GitHub Pages can serve the `/admin` UI, but it cannot run server-side OAuth routes. To enable CMS login on GitHub Pages, deploy a Decap CMS GitHub OAuth proxy and set `base_url` and `auth_endpoint` in `public/admin/config.yml`.
+
+Decap open authoring is enabled for the GitHub backend. With `publish_mode: editorial_workflow`, contributors without repository write access can submit CMS edits through fork-backed pull requests after OAuth is configured.
 
 This repo also includes Cloudflare Pages Functions that can be used for Decap CMS GitHub OAuth if the site, or just the OAuth proxy, is deployed on Cloudflare Pages:
 

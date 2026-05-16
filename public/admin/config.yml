@@ -15,6 +15,9 @@ backend:
 # Also protect the main branch in GitHub and require at least one approving PR review.
 publish_mode: editorial_workflow
 
+# Open authoring lets GitHub users without direct write access propose content
+# changes from forks. Maintainers review and merge those changes as PRs.
+
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
@@ -38,9 +41,10 @@ collections:
         name: "role"
         widget: "select"
         options:
-          - "Director"
+          - "Principal Investigator"
           - "Faculty / Senior Researchers"
           - "PhD Students"
+          - "Undergraduate / Master's Students"
           - "Postdocs"
           - "Visiting Scholars"
           - "Interns"
@@ -127,6 +131,12 @@ collections:
           - "thesis"
           - "demo"
       - { label: "Abstract", name: "abstract", widget: "text" }
+      - label: "Badges"
+        name: "badges"
+        widget: "list"
+        required: false
+        hint: "Examples: ICLR 2026, ICML 2026, Spotlight, Oral, Selected"
+        field: { label: "Badge", name: "badge", widget: "string" }
       - label: "Links and BibTeX"
         name: "links"
         widget: "object"
@@ -153,7 +163,17 @@ collections:
     summary: "{{date}} - {{title}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
+      - { label: "Short Title", name: "shortTitle", widget: "string", required: false }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Display Date", name: "displayDate", widget: "string", required: false, hint: "Use this for year-only labels such as 2026." }
+      - { label: "Category", name: "category", widget: "string", required: false }
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        required: false
+        field: { label: "Tag", name: "tag", widget: "string" }
       - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Source Type", name: "sourceType", widget: "string", required: false }
+      - { label: "Source URL", name: "sourceUrl", widget: "string", required: false }
       - { label: "Image", name: "image", widget: "image", required: false }
       - { label: "External Link", name: "link", widget: "string", required: false }
