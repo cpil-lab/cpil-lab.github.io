@@ -1,7 +1,7 @@
 ---
 import { ArrowUpRight, Calendar } from 'lucide-astro';
 import type { CollectionEntry } from 'astro:content';
-import { withBase } from '../lib/paths';
+import { externalUrl, withBase } from '../lib/paths';
 
 interface Props {
   item: CollectionEntry<'news'>;
@@ -52,7 +52,7 @@ const href = sourceUrl || link;
     }
     {
       href && (
-        <a href={href} class="inline-flex items-center gap-1.5 text-sm font-semibold text-[rgb(var(--accent-strong))]">
+        <a href={externalUrl(href)} class="inline-flex items-center gap-1.5 text-sm font-semibold text-[rgb(var(--accent-strong))]">
           {sourceType ? `Read on ${sourceType}` : 'Read more'}
           <ArrowUpRight class="size-4" aria-hidden="true" />
         </a>

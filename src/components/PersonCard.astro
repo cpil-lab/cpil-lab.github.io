@@ -1,7 +1,7 @@
 ---
 import { ExternalLink, Mail } from 'lucide-astro';
 import type { CollectionEntry } from 'astro:content';
-import { withBase } from '../lib/paths';
+import { externalUrl, withBase } from '../lib/paths';
 
 interface Props {
   person: CollectionEntry<'people'>;
@@ -106,7 +106,7 @@ const hiddenInterestCount = interests.length - visibleInterests.length;
       }
       {
         website && (
-          <a href={website} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
+          <a href={externalUrl(website)} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
             <ExternalLink class="size-4" aria-hidden="true" />
             Website
           </a>

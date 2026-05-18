@@ -1,6 +1,7 @@
 ---
 import { Clipboard, ExternalLink } from 'lucide-astro';
 import type { CollectionEntry } from 'astro:content';
+import { externalUrl } from '../lib/paths';
 
 interface Props {
   publication: CollectionEntry<'publications'>;
@@ -62,7 +63,7 @@ const searchableBadges = badges.join('|').toLowerCase();
   <div class="mt-5 flex flex-wrap gap-3 text-sm">
     {
       links.paper && (
-        <a href={links.paper} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
+        <a href={externalUrl(links.paper)} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
           Paper
           <ExternalLink class="size-4" aria-hidden="true" />
         </a>
@@ -70,7 +71,7 @@ const searchableBadges = badges.join('|').toLowerCase();
     }
     {
       links.code && (
-        <a href={links.code} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
+        <a href={externalUrl(links.code)} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
           Code
           <ExternalLink class="size-4" aria-hidden="true" />
         </a>
@@ -78,7 +79,7 @@ const searchableBadges = badges.join('|').toLowerCase();
     }
     {
       links.project && (
-        <a href={links.project} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
+        <a href={externalUrl(links.project)} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
           Project
           <ExternalLink class="size-4" aria-hidden="true" />
         </a>

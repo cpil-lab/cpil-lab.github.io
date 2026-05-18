@@ -1,7 +1,7 @@
 ---
 import { ArrowUpRight } from 'lucide-astro';
 import type { CollectionEntry } from 'astro:content';
-import { withBase } from '../lib/paths';
+import { externalUrl, withBase } from '../lib/paths';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -63,7 +63,7 @@ const { title, shortDescription, longDescription, members, tags, image, links, s
       links.length > 0 && (
         <div class="flex flex-wrap gap-3 text-sm">
           {links.map((link) => (
-            <a href={link.url} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
+            <a href={externalUrl(link.url)} class="inline-flex items-center gap-1.5 font-semibold text-[rgb(var(--accent-strong))]">
               {link.label}
               <ArrowUpRight class="size-4" aria-hidden="true" />
             </a>

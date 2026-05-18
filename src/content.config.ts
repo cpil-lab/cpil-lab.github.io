@@ -2,7 +2,22 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-const optionalUrl = z.string().url().or(z.literal('')).optional();
+const urlLike = z
+  .string()
+  .trim()
+  .refine((value) => {
+    if (!value) return true;
+    const normalized = /^[a-z][a-z\d+\-.]*:\/\//i.test(value) ? value : `https://${value}`;
+
+    try {
+      new URL(normalized);
+      return true;
+    } catch {
+      return false;
+    }
+  }, 'Invalid url');
+
+const optionalUrl = urlLike.or(z.literal('')).optional();
 const optionalEmail = z.string().email().or(z.literal('')).optional();
 
 const role = z.enum([
@@ -46,7 +61,7 @@ const projects = defineCollection({
       .array(
         z.object({
           label: z.string(),
-          url: z.string().url(),
+          url: urlLike,
         }),
       )
       .default([]),

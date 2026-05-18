@@ -12,3 +12,16 @@ export function withBase(path: string): string {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   return `${base}${normalizedPath}` || '/';
 }
+
+export function externalUrl(url: string): string {
+  if (
+    url.startsWith('http://') ||
+    url.startsWith('https://') ||
+    url.startsWith('mailto:') ||
+    url.startsWith('#')
+  ) {
+    return url;
+  }
+
+  return `https://${url}`;
+}
