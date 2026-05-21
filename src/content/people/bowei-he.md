@@ -2,6 +2,7 @@
 name: Bowei He
 role: Postdocs
 affiliation: MBZUAI
+photo: /images/people/weixin-image_20260415062215_576_181.jpg
 email: Bowei.He@mbzuai.ac.ae
 website: https://scholar.google.com/citations?user=1cH0A9cAAAAJ
 interests:
