@@ -2,6 +2,7 @@
 name: Dun Yuan
 role: PhD Students
 affiliation: McGill University / Mila
+photo: /images/people/dun-yuan.jpg
 email: dun.yuan@mail.mcgill.ca
 website: https://yuan-dun.com
 interests:
