@@ -9,7 +9,7 @@ interests:
   - Agentic AI
   - JEPA
   - Machine Learning
-  - Data Mining
+  - AI for Finance
 bio: Dr. Yankai Chen is currently a Postdoctoral Associate supervised by Prof.
   Xue (Steve) Liu at MBZUAI. He previously held postdoctoral associate positions
   at Cornell University and The Chinese University of Hong Kong (CUHK). He
