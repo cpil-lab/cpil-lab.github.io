@@ -5,7 +5,11 @@ affiliation: MBZUAI
 photo: /images/people/img_4390.jpg
 email: yankaichan3@gmail.com
 website: https://yankai-chen.github.io/
-interests: []
+interests:
+  - Agentic AI
+  - JEPA
+  - Machine Learning
+  - Data Mining
 bio: Dr. Yankai Chen is currently a Postdoctoral Associate supervised by Prof.
   Xue (Steve) Liu at MBZUAI. He previously held postdoctoral associate positions
   at Cornell University and The Chinese University of Hong Kong (CUHK). He
