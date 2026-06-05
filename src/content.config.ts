@@ -60,6 +60,7 @@ const projects = defineCollection({
     title: z.string(),
     shortDescription: z.string(),
     longDescription: z.string(),
+    leaders: z.array(z.string()).default([]),
     members: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
     image: pathWithFallback('/images/projects/placeholder.png'),

@@ -9,7 +9,11 @@ tags:
   - Large Language Models
 image: "/images/projects/placeholder.png"
 links: []
-status: "active"
-featured: true
-order: 1
+status: "completed"
+featured: false
+order: 99
 ---
+
+## How to Use This Template
+
+Copy this record when adding a new project. Keep the short description compact for cards, use the long description for the overview panel, and use the Markdown body for project goals, recent progress, milestones, links, or collaboration notes.

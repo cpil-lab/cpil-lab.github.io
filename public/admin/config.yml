@@ -82,6 +82,11 @@ collections:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Short Description", name: "shortDescription", widget: "text" }
       - { label: "Long Description", name: "longDescription", widget: "text" }
+      - label: "Leaders"
+        name: "leaders"
+        widget: "list"
+        required: false
+        field: { label: "Leader", name: "leader", widget: "string" }
       - label: "Members"
         name: "members"
         widget: "list"
@@ -109,6 +114,7 @@ collections:
           - "completed"
       - { label: "Featured on Home", name: "featured", widget: "boolean", default: false }
       - { label: "Sort Order", name: "order", widget: "number", value_type: "int", default: 100 }
+      - { label: "Project Page Body", name: "body", widget: "markdown", required: false }
 
   - name: "publications"
     label: "Publications"
