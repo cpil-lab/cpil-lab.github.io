@@ -24,6 +24,18 @@ links:
     url: "https://mystmd.org/guide"
   - label: "MyST Article Theme"
     url: "https://github.com/myst-templates/article-theme"
+publications: []
+impactHolders:
+  - name: "Evidence publishing platform"
+    role: "Scientific publishing infrastructure"
+    url: "https://evidencepub.io/"
+    summary: "The project aims to improve Evidence as a dynamic publishing environment for interactive, executable, and reusable scientific papers."
+  - name: "AI paper authors and readers"
+    role: "Primary research user community"
+    summary: "The project targets AI researchers who want papers to expose code, data, figures, and evaluation workflows beyond static PDF artifacts."
+  - name: "Scientific publishing, HCI, and education communities"
+    role: "Broader impact communities"
+    summary: "The project explores how dynamic papers can support reproducibility, inspection, learning, and communication across technical audiences."
 status: "active"
 featured: true
 order: 1

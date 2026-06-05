@@ -105,6 +105,26 @@ collections:
         fields:
           - { label: "Label", name: "label", widget: "string" }
           - { label: "URL", name: "url", widget: "string" }
+      - label: "Related Publications"
+        name: "publications"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Venue", name: "venue", widget: "string", required: false }
+          - { label: "Year", name: "year", widget: "number", value_type: "int", required: false }
+          - { label: "URL", name: "url", widget: "string", required: false }
+          - { label: "Summary", name: "summary", widget: "text", required: false }
+      - label: "Impact Holders"
+        name: "impactHolders"
+        widget: "list"
+        required: false
+        hint: "People, organizations, communities, or user groups affected by or collaborating around this project."
+        fields:
+          - { label: "Name", name: "name", widget: "string" }
+          - { label: "Role", name: "role", widget: "string", required: false }
+          - { label: "URL", name: "url", widget: "string", required: false }
+          - { label: "Summary", name: "summary", widget: "text", required: false }
       - label: "Status"
         name: "status"
         widget: "select"

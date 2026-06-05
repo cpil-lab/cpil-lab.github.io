@@ -9,6 +9,17 @@ tags:
   - Large Language Models
 image: "/images/projects/placeholder.png"
 links: []
+publications:
+  - title: "Sample Related Publication"
+    venue: "Sample Venue"
+    year: 2026
+    url: ""
+    summary: "Replace this with a verified paper, preprint, demo, or technical report connected to the project."
+impactHolders:
+  - name: "Sample Impact Holder"
+    role: "User group or collaborator"
+    url: ""
+    summary: "Replace this with a real person, organization, community, or user group connected to the project's impact."
 status: "completed"
 featured: false
 order: 99

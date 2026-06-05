@@ -26,6 +26,21 @@ const pathWithFallback = (fallback: string) =>
     .transform((value) => value || fallback)
     .default(fallback);
 
+const projectPublication = z.object({
+  title: z.string(),
+  venue: z.string().optional().default(''),
+  year: z.number().int().optional(),
+  url: optionalUrl,
+  summary: z.string().optional().default(''),
+});
+
+const impactHolder = z.object({
+  name: z.string(),
+  role: z.string().optional().default(''),
+  url: optionalUrl,
+  summary: z.string().optional().default(''),
+});
+
 const role = z.enum([
   'Principal Investigator',
   'PI',
@@ -72,6 +87,8 @@ const projects = defineCollection({
         }),
       )
       .default([]),
+    publications: z.array(projectPublication).default([]),
+    impactHolders: z.array(impactHolder).default([]),
     status: z.enum(['active', 'completed']).default('active'),
     featured: z.boolean().default(false),
     order: z.number().int().default(100),

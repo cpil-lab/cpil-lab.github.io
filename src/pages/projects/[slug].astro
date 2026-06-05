@@ -20,7 +20,19 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
-const { title, shortDescription, longDescription, leaders, members, tags, image, links, status } = project.data;
+const {
+  title,
+  shortDescription,
+  longDescription,
+  leaders,
+  members,
+  tags,
+  image,
+  links,
+  publications,
+  impactHolders,
+  status,
+} = project.data;
 const imageIsIcon = image.toLowerCase().endsWith('.svg') || image.toLowerCase().includes('logo');
 ---
 
@@ -75,6 +87,74 @@ const imageIsIcon = image.toLowerCase().endsWith('.svg') || image.toLowerCase().
 
       <section class="project-content">
         <Content />
+      </section>
+
+      <section class="grid gap-5 lg:grid-cols-2">
+        <article class="card p-6">
+          <h2 class="text-2xl font-bold text-[rgb(var(--ink))]">Related Publications</h2>
+          {
+            publications.length > 0 ? (
+              <ul class="mt-5 grid gap-4">
+                {publications.map((publication) => (
+                  <li class="border-t border-[rgba(var(--line),0.82)] pt-4 first:border-t-0 first:pt-0">
+                    <h3 class="text-base font-bold leading-6 text-[rgb(var(--ink))]">
+                      {publication.url ? (
+                        <a href={externalUrl(publication.url)} class="inline-flex items-start gap-1.5 text-inherit no-underline hover:text-[rgb(var(--accent-strong))]">
+                          {publication.title}
+                          <ArrowUpRight class="mt-1 size-4 shrink-0" aria-hidden="true" />
+                        </a>
+                      ) : (
+                        publication.title
+                      )}
+                    </h3>
+                    {
+                      (publication.venue || publication.year) && (
+                        <p class="mt-1 text-sm font-semibold text-[rgb(var(--warm))]">
+                          {[publication.venue, publication.year].filter(Boolean).join(' · ')}
+                        </p>
+                      )
+                    }
+                    {publication.summary && <p class="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{publication.summary}</p>}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="mt-4 text-sm leading-6 text-[rgb(var(--muted))]">
+                Publication records will be added here as project outputs are released.
+              </p>
+            )
+          }
+        </article>
+
+        <article class="card p-6">
+          <h2 class="text-2xl font-bold text-[rgb(var(--ink))]">Impact Holders</h2>
+          {
+            impactHolders.length > 0 ? (
+              <ul class="mt-5 grid gap-4">
+                {impactHolders.map((holder) => (
+                  <li class="border-t border-[rgba(var(--line),0.82)] pt-4 first:border-t-0 first:pt-0">
+                    <h3 class="text-base font-bold leading-6 text-[rgb(var(--ink))]">
+                      {holder.url ? (
+                        <a href={externalUrl(holder.url)} class="inline-flex items-start gap-1.5 text-inherit no-underline hover:text-[rgb(var(--accent-strong))]">
+                          {holder.name}
+                          <ArrowUpRight class="mt-1 size-4 shrink-0" aria-hidden="true" />
+                        </a>
+                      ) : (
+                        holder.name
+                      )}
+                    </h3>
+                    {holder.role && <p class="mt-1 text-sm font-semibold text-[rgb(var(--warm))]">{holder.role}</p>}
+                    {holder.summary && <p class="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{holder.summary}</p>}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="mt-4 text-sm leading-6 text-[rgb(var(--muted))]">
+                Impact holders and user communities will be added as the project scope becomes clearer.
+              </p>
+            )
+          }
+        </article>
       </section>
     </article>
 
