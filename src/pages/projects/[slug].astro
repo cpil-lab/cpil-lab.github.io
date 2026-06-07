@@ -26,6 +26,7 @@ const {
   longDescription,
   leaders,
   members,
+  collaborators,
   tags,
   image,
   links,
@@ -108,6 +109,11 @@ const imageIsIcon = image.toLowerCase().endsWith('.svg') || image.toLowerCase().
                       )}
                     </h3>
                     {
+                      publication.authors && (
+                        <p class="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{publication.authors}</p>
+                      )
+                    }
+                    {
                       (publication.venue || publication.year) && (
                         <p class="mt-1 text-sm font-semibold text-[rgb(var(--warm))]">
                           {[publication.venue, publication.year].filter(Boolean).join(' · ')}
@@ -176,6 +182,14 @@ const imageIsIcon = image.toLowerCase().endsWith('.svg') || image.toLowerCase().
           <div>
             <p class="text-xs font-bold uppercase tracking-[0.12em] text-[rgb(var(--warm))]">Members</p>
             <p class="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{members.join(', ')}</p>
+          </div>
+        )
+      }
+      {
+        collaborators.length > 0 && (
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.12em] text-[rgb(var(--warm))]">Collaborators</p>
+            <p class="mt-2 text-sm leading-6 text-[rgb(var(--muted))]">{collaborators.join(', ')}</p>
           </div>
         )
       }

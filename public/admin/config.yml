@@ -92,6 +92,11 @@ collections:
         widget: "list"
         required: false
         field: { label: "Member", name: "member", widget: "string" }
+      - label: "Collaborators"
+        name: "collaborators"
+        widget: "list"
+        required: false
+        field: { label: "Collaborator", name: "collaborator", widget: "string" }
       - label: "Tags"
         name: "tags"
         widget: "list"
@@ -111,6 +116,7 @@ collections:
         required: false
         fields:
           - { label: "Title", name: "title", widget: "string" }
+          - { label: "Authors", name: "authors", widget: "string", required: false }
           - { label: "Venue", name: "venue", widget: "string", required: false }
           - { label: "Year", name: "year", widget: "number", value_type: "int", required: false }
           - { label: "URL", name: "url", widget: "string", required: false }

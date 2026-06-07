@@ -28,6 +28,7 @@ const pathWithFallback = (fallback: string) =>
 
 const projectPublication = z.object({
   title: z.string(),
+  authors: z.string().optional().default(''),
   venue: z.string().optional().default(''),
   year: z.number().int().optional(),
   url: optionalUrl,
@@ -77,6 +78,7 @@ const projects = defineCollection({
     longDescription: z.string(),
     leaders: z.array(z.string()).default([]),
     members: z.array(z.string()).default([]),
+    collaborators: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
     image: pathWithFallback('/images/projects/placeholder.png'),
     links: z
